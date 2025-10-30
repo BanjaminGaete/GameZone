@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CarritoDao {
-    @Query("SELECT * FROM carrito")
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun agregarAlCarrito(item: CarritoItem)
+
+    @Query("SELECT * FROM CarritoItem")
     fun obtenerCarrito(): Flow<List<CarritoItem>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun agregar(item: CarritoItem)
-
-    @Delete
-    suspend fun eliminar(item: CarritoItem)
+    @Query("DELETE FROM CarritoItem")
+    suspend fun vaciarCarrito()
 }

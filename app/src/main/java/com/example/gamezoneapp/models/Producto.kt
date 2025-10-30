@@ -9,5 +9,5 @@ data class Producto(
     val nombre: String,
     val descripcion: String,
     val precio: Double,
-    val imagen: String // puede ser URL o ruta local
+    val imagenResId: Int
 )

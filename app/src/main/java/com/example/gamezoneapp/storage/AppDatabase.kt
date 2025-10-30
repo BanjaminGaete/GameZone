@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 import com.example.gamezoneapp.models.Producto
 import com.example.gamezoneapp.models.CarritoItem
 
-@Database(entities = [Producto::class, CarritoItem::class], version = 1)
+@Database(entities = [Producto::class, CarritoItem::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productoDao(): ProductoDao
     abstract fun carritoDao(): CarritoDao

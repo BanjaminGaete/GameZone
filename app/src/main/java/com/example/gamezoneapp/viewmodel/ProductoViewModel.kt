@@ -2,42 +2,72 @@ package com.example.gamezoneapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gamezoneapp.models.CarritoItem
 import com.example.gamezoneapp.models.Producto
+import com.example.gamezoneapp.storage.CarritoDao
 import com.example.gamezoneapp.storage.ProductoRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ProductoViewModel(private val repository: ProductoRepository) : ViewModel() {
-    val productos: StateFlow<List<Producto>> = repository.productos.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        emptyList()
-    )
+class ProductoViewModel(
+    private val productoRepository: ProductoRepository,
+    private val carritoDao: CarritoDao
+) : ViewModel() {
 
-    fun agregarProductoDemo() {
+    val productos: StateFlow<List<Producto>> = productoRepository.productos
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+
+
+    val carrito: StateFlow<List<CarritoItem>> = carritoDao.obtenerCarrito()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+
+    fun agregarAlCarrito(producto: Producto) {
         viewModelScope.launch {
-            val demo = Producto(
-                nombre = "Juego demo",
-                descripcion = "Producto de prueba",
-                precio = 0.0,
-                imagen = "https://via.placeholder.com/150"
+            val item = CarritoItem(
+                productoId = producto.id,
+                nombre = producto.nombre,
+                precio = producto.precio,
+                cantidad = 1
             )
-            repository.agregar(demo)
+            carritoDao.agregarAlCarrito(item)
         }
     }
 
-    fun editarProducto(producto: Producto) {
+    fun vaciarCarrito() {
         viewModelScope.launch {
-            val editado = producto.copy(nombre = producto.nombre + " (editado)")
-            repository.editar(editado)
+            carritoDao.vaciarCarrito()
         }
     }
 
+    fun agregarProducto(producto: Producto) {
+        viewModelScope.launch {
+            productoRepository.agregar(producto)
+        }
+    }
     fun eliminarProducto(producto: Producto) {
         viewModelScope.launch {
-            repository.eliminar(producto)
+            productoRepository.eliminar(producto)
+
+
+
         }
     }
+
+    fun actualizarProducto(producto: Producto) {
+        viewModelScope.launch {
+            productoRepository.actualizarProducto(producto)
+        }
+    }
+    fun obtenerProductoPorId(id: Int): Flow<Producto?> {
+        return productoRepository.obtenerProductoPorId(id)
+    }
+
+
 }
+
+
+
+

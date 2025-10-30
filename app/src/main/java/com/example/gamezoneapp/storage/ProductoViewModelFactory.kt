@@ -7,12 +7,13 @@ import com.example.gamezoneapp.viewmodel.ProductoViewModel
 
 
 class ProductoViewModelFactory(
-    private val repository: ProductoRepository
+    private val repository: ProductoRepository,
+    private val carritoDao: CarritoDao
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ProductoViewModel::class.java)) {
-            return ProductoViewModel(repository) as T
+            return ProductoViewModel(repository, carritoDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -1,5 +1,7 @@
 package com.example.gamezoneapp
 
+
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import com.example.gamezoneapp.storage.AppDatabase
 import com.example.gamezoneapp.storage.ProductoRepository
 import com.example.gamezoneapp.storage.ProductoViewModelFactory
@@ -19,15 +22,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. Instancia de la base de datos
-        val database = AppDatabase.getInstance(applicationContext)
+        val database = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "productos_db"
+        ).fallbackToDestructiveMigration()
+            .build()
+        val productoDao = database.productoDao()
+        val carritoDao = database.carritoDao()
 
-        // 2. Repositorio
-        val repository = ProductoRepository(database.productoDao())
 
-        // 3. ViewModel con Factory
-        val factory = ProductoViewModelFactory(repository)
+
+
+        val repository = ProductoRepository(productoDao)
+        val factory = ProductoViewModelFactory(repository, carritoDao)
         val productoViewModel = ViewModelProvider(this, factory)[ProductoViewModel::class.java]
+
 
         // 4. UI con Compose
         setContent {
@@ -35,7 +45,8 @@ class MainActivity : ComponentActivity() {
                 AppNavigation(productoViewModel)
             }
         }
-    }
+
+
 }
 
 
@@ -52,5 +63,11 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     GameZoneAppTheme {
         Greeting("Android")
+
     }
 }
+}
+
+
+
+

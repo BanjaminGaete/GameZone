@@ -22,4 +22,11 @@ interface ProductoDao {
 
     @Delete
     suspend fun eliminar(producto: Producto)
+
+    @Update
+    suspend fun actualizarProducto(producto: Producto)
+
+    @Query("SELECT * FROM productos WHERE id = :id")
+    fun obtenerPorId(id: Int): Flow<Producto?>
+
 }
