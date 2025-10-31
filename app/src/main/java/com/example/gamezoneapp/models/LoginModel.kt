@@ -1,4 +1,6 @@
 package com.example.gamezoneapp.models
 
-class LoginModel {
-}
+data class LoginModel (
+    var correo: String,
+    var contrasena: String
+)
