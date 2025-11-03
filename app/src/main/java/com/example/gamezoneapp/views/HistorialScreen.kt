@@ -43,6 +43,7 @@ fun HistorialScreen(navController: NavController? = null){
     Column (modifier = Modifier.fillMaxSize()) {
         Row (modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween){
+            Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = { navController?.navigate("perfil") }) {
                 Text("Volver")
             }

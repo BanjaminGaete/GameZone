@@ -76,6 +76,11 @@ fun PerfilScreen(navController: NavController, perfilViewModel: PerfilViewModel)
         Button(onClick = { navController.navigate("historial") }) {
             Text("Historial de compras")
         }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(onClick = { navController.navigate("inicio") }) {
+            Text("Volver")
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
