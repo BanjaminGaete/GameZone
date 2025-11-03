@@ -26,15 +26,25 @@ class ProductoViewModel(
 
     fun agregarAlCarrito(producto: Producto) {
         viewModelScope.launch {
-            val item = CarritoItem(
-                productoId = producto.id,
-                nombre = producto.nombre,
-                precio = producto.precio,
-                cantidad = 1
-            )
-            carritoDao.agregarAlCarrito(item)
+            val carritoActual = carrito.value
+            val existente = carritoActual.find { it.productoId == producto.id }
+
+            if (existente != null) {
+                val actualizado = existente.copy(cantidad = existente.cantidad + 1)
+                carritoDao.actualizarCantidad(actualizado)
+            } else {
+                val nuevoItem = CarritoItem(
+                    productoId = producto.id,
+                    nombre = producto.nombre,
+                    precio = producto.precio,
+                    cantidad = 1,
+                    imagenResId = producto.imagenResId,
+                )
+                carritoDao.agregarAlCarrito(nuevoItem)
+            }
         }
     }
+
 
     fun vaciarCarrito() {
         viewModelScope.launch {
@@ -63,6 +73,18 @@ class ProductoViewModel(
     }
     fun obtenerProductoPorId(id: Int): Flow<Producto?> {
         return productoRepository.obtenerProductoPorId(id)
+    }
+
+    fun actualizarCantidadCarrito(item: CarritoItem) {
+        viewModelScope.launch {
+            carritoDao.actualizarCantidad(item)
+        }
+    }
+
+    fun eliminarDelCarrito(item: CarritoItem) {
+        viewModelScope.launch {
+            carritoDao.eliminarItem(item)
+        }
     }
 
 

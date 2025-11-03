@@ -14,112 +14,57 @@ import com.example.gamezoneapp.helper.showConfirm
 import com.example.gamezoneapp.viewmodel.LoginViewModel
 import com.example.gamezoneapp.viewmodel.ProductoViewModel
 
-/*@Composable
-fun LoginScreen(navController: NavController, productoViewModel: ProductoViewModel) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf(false) }
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(32.dp),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Iniciar sesión", style = MaterialTheme.typography.headlineMedium)
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Usuario") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation()
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                when {
-                    username == "admin" && password == "admin" -> {
-                        navController.navigate("admin")
-                    }
-                    username == "usuario" && password == "usuario" -> {
-                        navController.navigate("inicio")
-                    }
-                    else -> {
-                        error = true
-                    }
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Ingresar")
-        }
-
-        if (error) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Credenciales inválidas", color = MaterialTheme.colorScheme.error)
-        }
-    }
-}
-*/
-
 @Composable
 fun LoginScreen(navController: NavController, productoViewModel: ProductoViewModel) {
     val viewModel = viewModel<LoginViewModel>()
     val correo = viewModel.loginViewModel.correo
     val contrasena = viewModel.loginViewModel.contrasena
 
-    val nav = viewModel.deberiamosNavegar
 
-    if(nav == true){
-        navController?.navigate("inicio")
+    if (viewModel.deberiamosNavegar) {
+        navController.navigate("inicio") {
+            popUpTo("login") { inclusive = true }
+        }
         viewModel.cambiarEstadoNavegacion()
     }
 
-    val navAdmin = viewModel.deberiamosNavegarAdmin
 
-    if(navAdmin == true){
-        navController?.navigate("admin")
+    if (viewModel.deberiamosNavegarAdmin) {
+        navController.navigate("admin") {
+            popUpTo("login") { inclusive = true }
+        }
         viewModel.cambiarEstadoNavegacionAdmin()
     }
 
 
-    if(viewModel.mostrarAlerta == true){
+    if (viewModel.mostrarAlerta) {
         showAlert(
             titulo = viewModel.tituloAlerta,
             mensaje = viewModel.mensajeAlerta,
-            onDismiss = {viewModel.descartarAlerta()},
-            onConfirm = {viewModel.descartarAlerta()},
+            onDismiss = { viewModel.descartarAlerta() },
+            onConfirm = { viewModel.descartarAlerta() },
             textoBtnConfirmar = viewModel.textoBotonAlerta
         )
     }
 
-    if(viewModel.mostrarConfirmar == true){
+
+    if (viewModel.mostrarConfirmar) {
         showConfirm(
             titulo = viewModel.tituloConfirmar,
             mensaje = viewModel.mensajeConfirmar,
             textoBtnCancelar = viewModel.textoBtnCancelar,
             textoBtnConfirmar = viewModel.textoBtnConfirmar,
-            eventoCancelar = {viewModel.btnCancelarConfirmar()},
-            eventoConfirmar = {viewModel.btnAceptarConfirmar()},
-            eventoTerminarAlerta = {viewModel.terminarConfirmar()}
+            eventoCancelar = { viewModel.btnCancelarConfirmar() },
+            eventoConfirmar = { viewModel.confirmarLogin() },
+            eventoTerminarAlerta = {  }
         )
     }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(32.dp),
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Text("Iniciar sesión", style = MaterialTheme.typography.headlineMedium)
@@ -128,7 +73,7 @@ fun LoginScreen(navController: NavController, productoViewModel: ProductoViewMod
 
         OutlinedTextField(
             value = correo,
-            onValueChange = {viewModel.cambioCorreo(it)},
+            onValueChange = { viewModel.cambioCorreo(it) },
             label = { Text("Usuario") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -137,7 +82,7 @@ fun LoginScreen(navController: NavController, productoViewModel: ProductoViewMod
 
         OutlinedTextField(
             value = contrasena,
-            onValueChange = {viewModel.cambioContrasena(it)},
+            onValueChange = { viewModel.cambioContrasena(it) },
             label = { Text("Contraseña") },
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation()
@@ -146,7 +91,7 @@ fun LoginScreen(navController: NavController, productoViewModel: ProductoViewMod
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = {viewModel.auth()},
+            onClick = { viewModel.auth() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Ingresar")

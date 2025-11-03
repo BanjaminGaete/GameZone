@@ -28,23 +28,11 @@ class LoginViewModel: ViewModel() {
     var textoBotonAlerta by mutableStateOf("")
         private set
 
-    fun descartarAlerta(){
+    fun descartarAlerta() {
         mostrarAlerta = false
     }
 
-    var deberiamosNavegar by mutableStateOf(false)
-        private set
-
-    fun cambiarEstadoNavegacion(){
-        deberiamosNavegar = false
-    }
-    var deberiamosNavegarAdmin by mutableStateOf(false)
-        private set
-
-    fun cambiarEstadoNavegacionAdmin(){
-        deberiamosNavegarAdmin = false
-    }
-
+    // Confirmación
     var mostrarConfirmar by mutableStateOf(false)
         private set
     var tituloConfirmar by mutableStateOf("")
@@ -56,40 +44,59 @@ class LoginViewModel: ViewModel() {
     var textoBtnCancelar by mutableStateOf("")
         private set
 
-    fun btnAceptarConfirmar(){
-        mostrarConfirmar = false
-    }
-    fun btnCancelarConfirmar(){
-        mostrarConfirmar = false
-    }
-    fun terminarConfirmar(){
+    fun btnCancelarConfirmar() {
         mostrarConfirmar = false
     }
 
-    fun auth(){
+    // Navegación
+    var deberiamosNavegar by mutableStateOf(false)
+        private set
+    var deberiamosNavegarAdmin by mutableStateOf(false)
+        private set
+
+    fun cambiarEstadoNavegacion() {
+        deberiamosNavegar = false
+    }
+
+    fun cambiarEstadoNavegacionAdmin() {
+        deberiamosNavegarAdmin = false
+    }
+
+    fun auth() {
         Log.d("Correo", loginViewModel.correo)
         Log.d("Contrasena", loginViewModel.contrasena)
 
-        if(loginViewModel.correo == "usuario" && loginViewModel.contrasena == "usuario"){
-            //navegar al inicio usuario
-            deberiamosNavegar = true
-        }else if(loginViewModel.correo == "admin" && loginViewModel.contrasena == "admin"){
-            //navegar al inicio admin
-            deberiamosNavegarAdmin = true
-        }else if(loginViewModel.correo.isBlank() || loginViewModel.contrasena.isBlank()){
-            //Error ---> alerta
-            tituloAlerta = "Error de validación"
-            mensajeAlerta = "El correo y la contraseña no pueden estar vacíos."
-            textoBotonAlerta = "Confrimar"
-            //mostrarAlerta = true
+        when {
+            loginViewModel.correo.isBlank() -> {
+                tituloAlerta = "Error de validación"
+                mensajeAlerta = "Por favor ingrese el usuario."
+                textoBotonAlerta = "Cerrar"
+                mostrarAlerta = true
+            }
+            loginViewModel.contrasena.isBlank() -> {
+                tituloAlerta = "Error de validación"
+                mensajeAlerta = "Por favor ingrese la contraseña."
+                textoBotonAlerta = "Cerrar"
+                mostrarAlerta = true
+            }
+            else -> {
 
-            tituloConfirmar = "Confirmación"
-            mensajeConfirmar = "Esta seguro que desea hacerlo?"
-            textoBtnConfirmar = "Confirmar"
-            textoBtnCancelar = "Cancelar"
-            mostrarConfirmar = true
-        }else{
-            //Error  --> alerta
+                tituloConfirmar = "Confirmación"
+                mensajeConfirmar = "¿Está seguro que desea ingresar?"
+                textoBtnConfirmar = "Confirmar"
+                textoBtnCancelar = "Cancelar"
+                mostrarConfirmar = true
+            }
+        }
+    }
+    fun confirmarLogin() {
+        mostrarConfirmar = false
+
+        if (loginViewModel.correo == "usuario" && loginViewModel.contrasena == "usuario") {
+            deberiamosNavegar = true
+        } else if (loginViewModel.correo == "admin" && loginViewModel.contrasena == "admin") {
+            deberiamosNavegarAdmin = true
+        } else {
             tituloAlerta = "Error de credenciales"
             mensajeAlerta = "El correo o la contraseña no corresponden."
             textoBotonAlerta = "Aceptar"

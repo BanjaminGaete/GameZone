@@ -1,5 +1,6 @@
 package com.example.gamezoneapp.views
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,23 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.example.gamezoneapp.models.Producto
 import com.example.gamezoneapp.viewmodel.ProductoViewModel
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-
-
+import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.Color
 
 
 @Composable
 fun ProductoItem(
     producto: Producto,
     onEliminar: () -> Unit,
-    onEditar: () -> Unit // ✅ nueva función para editar
+    onEditar: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -58,7 +54,6 @@ fun ProductoItem(
                     Text("Editar")
                 }
 
-
                 Button(onClick = onEliminar) {
                     Text("Eliminar")
                 }
@@ -67,9 +62,6 @@ fun ProductoItem(
     }
 }
 
-
-
-
 @Composable
 fun AdminPanelScreen(
     navController: NavController,
@@ -77,13 +69,34 @@ fun AdminPanelScreen(
 ) {
     val productos by productoViewModel.productos.collectAsState()
 
+
+    BackHandler {
+
+    }
+
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Panel de Administración", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { navController.navigate("agregar") }) {
-            Text("Nuevo producto")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(onClick = { navController.navigate("agregar") }) {
+                Text("Nuevo producto")
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate("login") {
+                        popUpTo("admin") { inclusive = true }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Text("Cerrar sesión", color = Color.White)
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -93,7 +106,7 @@ fun AdminPanelScreen(
                 ProductoItem(
                     producto = producto,
                     onEliminar = { productoViewModel.eliminarProducto(producto) },
-                    onEditar = { navController.navigate("editar/${producto.id}") } // ✅ este es el que faltaba
+                    onEditar = { navController.navigate("editar/${producto.id}") }
                 )
             }
         }

@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.gamezoneapp.models.CarritoItem
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +17,12 @@ interface CarritoDao {
     @Query("SELECT * FROM CarritoItem")
     fun obtenerCarrito(): Flow<List<CarritoItem>>
 
+    @Update
+    suspend fun actualizarCantidad(item: CarritoItem)
+
     @Query("DELETE FROM CarritoItem")
     suspend fun vaciarCarrito()
+
+    @Delete
+    suspend fun eliminarItem(item: CarritoItem)
 }

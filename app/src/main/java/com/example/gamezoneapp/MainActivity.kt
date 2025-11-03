@@ -16,6 +16,7 @@ import com.example.gamezoneapp.storage.ProductoRepository
 import com.example.gamezoneapp.storage.ProductoViewModelFactory
 import com.example.gamezoneapp.ui.theme.GameZoneAppTheme
 import com.example.gamezoneapp.navigation.AppNavigation
+
 import com.example.gamezoneapp.viewmodel.ProductoViewModel
 
 class MainActivity : ComponentActivity() {
@@ -28,25 +29,21 @@ class MainActivity : ComponentActivity() {
             "productos_db"
         ).fallbackToDestructiveMigration()
             .build()
+
         val productoDao = database.productoDao()
         val carritoDao = database.carritoDao()
-
-
-
 
         val repository = ProductoRepository(productoDao)
         val factory = ProductoViewModelFactory(repository, carritoDao)
         val productoViewModel = ViewModelProvider(this, factory)[ProductoViewModel::class.java]
 
 
-        // 4. UI con Compose
         setContent {
             GameZoneAppTheme {
                 AppNavigation(productoViewModel)
             }
         }
-
-
+    }
 }
 
 
@@ -63,11 +60,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     GameZoneAppTheme {
         Greeting("Android")
-
     }
 }
-}
-
 
 
 

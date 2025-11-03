@@ -6,7 +6,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
-//La alerta vista en clases deberia servirnos y comportarse exactamente igual.
+
 
 @Composable
 fun showAlert(

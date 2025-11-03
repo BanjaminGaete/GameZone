@@ -2,16 +2,12 @@ package com.example.gamezoneapp.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -20,11 +16,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.example.gamezoneapp.models.Producto
 import com.example.gamezoneapp.viewmodel.ProductoViewModel
 import androidx.compose.material3.*
@@ -43,7 +36,6 @@ fun AgregarProductoScreen(
     var precioTexto by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
 
-    // Lista de imágenes disponibles
     val imagenesDisponibles = listOf(
         "Dante's Inferno" to R.drawable.dantesinferno,
         "God of War" to R.drawable.godofwar,
@@ -82,7 +74,6 @@ fun AgregarProductoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Menú desplegable de imágenes
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded }
