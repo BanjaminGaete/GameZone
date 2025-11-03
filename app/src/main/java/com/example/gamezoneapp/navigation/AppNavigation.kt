@@ -32,5 +32,6 @@ fun AppNavigation(productoViewModel: ProductoViewModel) {
         }
         composable("perfil") { PerfilScreen(navController, perfilViewModel) }
         composable("camara") { CamaraScreen(navController) }
+        composable("historial") { HistorialScreen(navController) }
     }
 }

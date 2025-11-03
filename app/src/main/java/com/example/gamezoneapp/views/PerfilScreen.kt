@@ -73,6 +73,12 @@ fun PerfilScreen(navController: NavController, perfilViewModel: PerfilViewModel)
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        Button(onClick = { navController.navigate("historial") }) {
+            Text("Historial de compras")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
         if (datosGuardados) {
             Text("Resumen de datos ingresados:", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
